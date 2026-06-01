@@ -145,6 +145,10 @@ export default function App() {
     type: 'info'
   });
 
+  // FAQ Page interactive states
+  const [faqSearchQuery, setFaqSearchQuery] = useState('');
+  const [activeFaqId, setActiveFaqId] = useState<string | null>(null);
+
   // Display date
   const [dashDateString, setDashDateString] = useState('');
 
@@ -628,6 +632,7 @@ export default function App() {
           <li><a href="#brokers" onClick={() => setActivePage('home')}>Brokers</a></li>
           <li><a href="#how-it-works" onClick={() => setActivePage('home')}>How It Works</a></li>
           <li><span className="cursor-pointer" onClick={() => setActivePage('payment')}>Quick Pay</span></li>
+          <li><span className="cursor-pointer" onClick={() => { setActivePage('faq'); window.scrollTo({ top: 0 }); }}>FAQ</span></li>
           <li><a href="#reviews" onClick={() => setActivePage('home')}>Reviews</a></li>
         </ul>
 
@@ -637,7 +642,7 @@ export default function App() {
             onClick={() => { setActivePage('payment'); }}
             style={{ marginRight: '8px' }}
           >
-            Quick Pay 💳
+            Quick Pay
           </button>
           {currentUser ? (
             <>
@@ -648,7 +653,11 @@ export default function App() {
               >
                 Dashboard
               </button>
-              <button className="btn btn-outline btn-sm btn-danger" onClick={handleLogout}>
+              <button 
+                className="btn btn-sm" 
+                onClick={handleLogout}
+                style={{ background: '#000000', color: '#ffffff', border: '1px solid var(--border)' }}
+              >
                 Sign Out
               </button>
             </>
@@ -701,6 +710,24 @@ export default function App() {
           How It Works
         </a>
         <span 
+          onClick={() => { setMobileNavOpen(false); setActivePage('terms'); window.scrollTo({ top: 0 }); }} 
+          style={{ color: 'var(--text2)', fontSize: '1rem', cursor: 'pointer', padding: '0.75rem 0', borderBottom: '1px solid var(--border2)' }}
+        >
+          Terms & Agreement
+        </span>
+        <span 
+          onClick={() => { setMobileNavOpen(false); setActivePage('privacy'); window.scrollTo({ top: 0 }); }} 
+          style={{ color: 'var(--text2)', fontSize: '1rem', cursor: 'pointer', padding: '0.75rem 0', borderBottom: '1px solid var(--border2)' }}
+        >
+          Privacy Agreement
+        </span>
+        <span 
+          onClick={() => { setMobileNavOpen(false); setActivePage('faq'); window.scrollTo({ top: 0 }); }} 
+          style={{ color: 'var(--text2)', fontSize: '1rem', cursor: 'pointer', padding: '0.75rem 0', borderBottom: '1px solid var(--border2)' }}
+        >
+          FAQ
+        </span>
+        <span 
           onClick={() => { setMobileNavOpen(false); setActivePage('payment'); }} 
           style={{ color: 'var(--gold)', fontSize: '1rem', cursor: 'pointer', padding: '0.75rem 0', borderBottom: '1px solid var(--border2)', fontWeight: 'bold' }}
         >
@@ -718,9 +745,9 @@ export default function App() {
                 Dashboard
               </button>
               <button 
-                className="btn btn-danger" 
+                className="btn" 
                 onClick={() => { setMobileNavOpen(false); handleLogout(); }}
-                style={{ justifyContent: 'center' }}
+                style={{ background: '#000000', color: '#ffffff', border: '1px solid var(--border)', justifyContent: 'center' }}
               >
                 Sign Out
               </button>
@@ -1368,6 +1395,240 @@ export default function App() {
           </div>
         )}
 
+        {/* PAGE 6: TERMS & AGREEMENT */}
+        {activePage === 'terms' && (
+          <div id="terms-page" className="fade-in" style={{ background: 'var(--bg)', minHeight: '100vh', padding: '6rem 1rem 4rem' }}>
+            <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: '2.5rem', fontWeight: 800, color: 'var(--text)' }}>
+                  Terms & <span style={{ color: 'var(--gold)' }}>Agreement</span>
+                </h1>
+                <button 
+                  className="btn btn-gold btn-sm" 
+                  onClick={() => { setActivePage('home'); window.scrollTo({ top: 0 }); }}
+                >
+                  ← Home
+                </button>
+              </div>
+
+              <div className="card" style={{ padding: '2.5rem', lineHeight: '1.7', color: 'var(--text2)', fontSize: '0.95rem' }}>
+                <p style={{ color: 'var(--text3)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>Last updated: June 1, 2026</p>
+                
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>1. Service Evaluation and Simulated Accounts</h3>
+                <p>
+                  QXT Funded delivers simulated evaluation programs ("Challenge Accounts" and "Instant Accounts") constructed to test trading strategy efficacy. All accounts provided inside the evaluation and funded phases are completely virtual simulator environments. Simulator metrics represent evaluations; actual payouts map performance indicators directly cleared and settled via cryptocurrency utility keys.
+                </p>
+
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>2. Account Parameters & Failure Thresholds</h3>
+                <p>
+                  Traders must adhere strictly to specified account constraints:
+                </p>
+                <ul style={{ paddingLeft: '1.25rem', marginTop: '0.5rem', listStyleType: 'disc' }}>
+                  <li><strong>Challenge Accounts:</strong> Must not exceed a daily loss limit of 30% of account size, or the pre-specified maximum trailing drawdown. Users must hit evaluation profit targets to attain funded status.</li>
+                  <li><strong>Instant Accounts:</strong> Allow immediate profit accumulation sandbox access with specified structural loss boundaries.</li>
+                </ul>
+                <p style={{ marginTop: '0.5rem' }}>
+                  Breaching evaluation daily loss, max drawdown, or compliance variables terminates simulated evaluation status immediately.
+                </p>
+
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>3. Secure Payouts & Crypto Settlement</h3>
+                <p>
+                  All purchases representing entry fees are strictly evaluated and settled via multi-chain cryptocurrency payment. Supported keys include USDT (ERC20, TRC20, BEP20), Bitcoin (BTC), and Ethereum (ETH). Withdrawals are cleared upon passing authentication and processed strictly inside simulation ledger rules under standard regulatory clearing intervals.
+                </p>
+
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>4. Refunding Strategy</h3>
+                <p>
+                  Due to digital allocation of simulated nodes and back-office credentials, evaluation service fees are strictly non-refundable once sandbox credentials have been generated and issued to the customer. All dispute resolutions remain governed by our support unit at <code>qxtfunded0@gmail.com</code>.
+                </p>
+
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>5. Account Confirmations</h3>
+                <p>
+                  Upon account selector completion and payment channel validation, an electronic welcome letter titled <strong>"Welcome to QXT Funded"</strong> is systematically distributed containing user registration data and custom credentials.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PAGE 7: PRIVACY POLICY */}
+        {activePage === 'privacy' && (
+          <div id="privacy-page" className="fade-in" style={{ background: 'var(--bg)', minHeight: '100vh', padding: '6rem 1rem 4rem' }}>
+            <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: '2.5rem', fontWeight: 800, color: 'var(--text)' }}>
+                  Privacy <span style={{ color: 'var(--gold)' }}>Agreement</span>
+                </h1>
+                <button 
+                  className="btn btn-gold btn-sm" 
+                  onClick={() => { setActivePage('home'); window.scrollTo({ top: 0 }); }}
+                >
+                  ← Home
+                </button>
+              </div>
+
+              <div className="card" style={{ padding: '2.5rem', lineHeight: '1.7', color: 'var(--text2)', fontSize: '0.95rem' }}>
+                <p style={{ color: 'var(--text3)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>Last updated: June 1, 2026</p>
+                
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>1. Secure Data Collection</h3>
+                <p>
+                  We gather minimal essential parameters required to establish secure trading nodes and dispatch account details. Collected parameters contain: email handles, payment addresses, selected sandboxed broker choices, and cryptographic hashes of passwords. No plaintext credentials or credit cards are collected.
+                </p>
+
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>2. Firestore Database Encryption & Client-Side Local Storage</h3>
+                <p>
+                  We rely on professional cloud storage engines (Firebase Firestore) safeguarded with strict security parameters to prevent leaks. Your operational metrics, ledger balances, and custom orders are securely bound to your decentralized userID and shielded from unauthorized third parties.
+                </p>
+
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>3. Public Blockchains & Payment Privacy</h3>
+                <p>
+                  Transactions executed via decentralized on-chain settlement networks (Tether USDT, Bitcoin, Ethereum) are publicly indexed as part of standard distributed ledger systems. While transaction hashes remain public on-chain, QXT Funded does not bind personal identifiability elements to distributed nodes.
+                </p>
+
+                <h3 style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '1.3rem', fontWeight: 700, margin: '1.5rem 0 0.75rem' }}>4. Service Communication</h3>
+                <p>
+                  Upon select, notification parameters containing Welcome emails and support replies are disseminated to keep your evaluations secure. For concerns regarding deletion, please reach support at <code>qxtfunded0@gmail.com</code>.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PAGE 8: FAQS SECTION */}
+        {activePage === 'faq' && (
+          <div id="faq-page" className="fade-in" style={{ background: 'var(--bg)', minHeight: '100vh', padding: '6rem 1rem 4rem' }}>
+            <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: '2.5rem', fontWeight: 800, color: 'var(--text)', marginBottom: '0.25rem' }}>
+                    Frequently Asked <span style={{ color: 'var(--gold)' }}>Questions</span>
+                  </h1>
+                  <p style={{ color: 'var(--text2)', fontSize: '0.9rem' }}>
+                    Find immediate answers to QXT Funded accounts, confirmations, and rules.
+                  </p>
+                </div>
+                <button 
+                  className="btn btn-gold btn-sm" 
+                  onClick={() => { setActivePage('home'); window.scrollTo({ top: 0 }); }}
+                >
+                  ← Home
+                </button>
+              </div>
+
+              {/* SEARCH BAR */}
+              <div style={{ marginBottom: '2rem' }}>
+                <input 
+                  type="text" 
+                  className="input-field" 
+                  placeholder="Search FAQ topics... (e.g., confirmation, daily loss, drawdown)" 
+                  value={faqSearchQuery}
+                  onChange={(e) => setFaqSearchQuery(e.target.value)}
+                  style={{ width: '100%', padding: '1rem 1.25rem', fontSize: '1rem', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '12px', color: 'var(--text)' }}
+                />
+              </div>
+
+              {/* FAQ LIST */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {[
+                  {
+                    id: "conf",
+                    q: "When I select an account, how do I receive my account confirmation?",
+                    a: "The user will receive a confirmation email (\"Welcome to QXT Funded\") after account selection."
+                  },
+                  {
+                    id: "drawdown",
+                    q: "What are the rules and profit targets for Challenge Accounts?",
+                    a: "Challenge Accounts have evaluation parameters: a 40% target profit milestone must be met without breaching active daily loss limits (30% of relative size) or the trailing maximum drawdown limits. These boundaries remain fully fixed per predefined tier models."
+                  },
+                  {
+                    id: "loss_limit",
+                    q: "How does the Daily Loss Limit function on Instant and Challenge tracks?",
+                    a: "The Daily Loss Limit is calculated as a fixed maximum allowable loss based on previous day end-of-day equity. Keep in mind that Challenge limits and Instant rules remain unchanged to protect simulator evaluation logic."
+                  },
+                  {
+                    id: "broker",
+                    q: "Which brokers and sandbox trading environments are supported?",
+                    a: "We systematically route simulated allocations to Olymp Trade, Pocket Option, Binomo, Quotex, and Tradowix platforms. You can configure your preference during account setup."
+                  },
+                  {
+                    id: "support",
+                    q: "How can I contact QXT Funded for clearing assistance?",
+                    a: "Contact our decentralized clearing desk via the dashboard, or email us directly at qxtfunded0@gmail.com. We deliver round-the-clock simulator support."
+                  }
+                ].filter(item => 
+                  item.q.toLowerCase().includes(faqSearchQuery.toLowerCase()) || 
+                  item.a.toLowerCase().includes(faqSearchQuery.toLowerCase())
+                ).map(item => {
+                  const isOpen = activeFaqId === item.id;
+                  return (
+                    <div 
+                      key={item.id} 
+                      className="card" 
+                      style={{ 
+                        padding: '1.25rem 1.75rem', 
+                        cursor: 'pointer', 
+                        background: isOpen ? 'var(--bg4)' : 'var(--bg3)', 
+                        border: isOpen ? '1px solid var(--gold)' : '1px solid var(--border)',
+                        transition: 'all 0.25s ease'
+                      }}
+                      onClick={() => setActiveFaqId(isOpen ? null : item.id)}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h4 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.05rem', fontWeight: 700, color: isOpen ? 'var(--gold)' : 'var(--text)', margin: 0 }}>
+                          {item.q}
+                        </h4>
+                        <span style={{ fontSize: '1.2rem', color: isOpen ? 'var(--gold)' : 'var(--text3)' }}>
+                          {isOpen ? '−' : '+'}
+                        </span>
+                      </div>
+                      
+                      {isOpen && (
+                        <div style={{ marginTop: '1rem', color: 'var(--text2)', fontSize: '0.92rem', lineHeight: '1.6', paddingTop: '0.75rem', borderTop: '1px solid var(--border2)' }}>
+                          {item.a}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {[
+                  {
+                    id: "conf",
+                    q: "When I select an account, how do I receive my account confirmation?",
+                    a: "The user will receive a confirmation email (\"Welcome to QXT Funded\") after account selection."
+                  },
+                  {
+                    id: "drawdown",
+                    q: "What are the rules and profit targets for Challenge Accounts?",
+                    a: "Challenge Accounts have evaluation parameters: a 40% target profit milestone must be met without breaching active daily loss limits (30% of relative size) or the trailing maximum drawdown limits. These boundaries remain fully fixed per predefined tier models."
+                  },
+                  {
+                    id: "loss_limit",
+                    q: "How does the Daily Loss Limit function on Instant and Challenge tracks?",
+                    a: "The Daily Loss Limit is calculated as a fixed maximum allowable loss based on previous day end-of-day equity. Keep in mind that Challenge limits and Instant rules remain unchanged to protect simulator evaluation logic."
+                  },
+                  {
+                    id: "broker",
+                    q: "Which brokers and sandbox trading environments are supported?",
+                    a: "We systematically route simulated allocations to Olymp Trade, Pocket Option, Binomo, Quotex, and Tradowix platforms. You can configure your preference during account setup."
+                  },
+                  {
+                    id: "support",
+                    q: "How can I contact QXT Funded for clearing assistance?",
+                    a: "Contact our decentralized clearing desk via the dashboard, or email us directly at qxtfunded0@gmail.com. We deliver round-the-clock simulator support."
+                  }
+                ].filter(item => 
+                  item.q.toLowerCase().includes(faqSearchQuery.toLowerCase()) || 
+                  item.a.toLowerCase().includes(faqSearchQuery.toLowerCase())
+                ).length === 0 && (
+                  <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text3)', background: 'var(--bg3)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+                    No results matched your search query. Try typing another word.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* PAGE 3: CLIENT DASHBOARD */}
         {activePage === 'dashboard' && currentUser && (
           <div id="dashboard-page" style={{ display: 'block', minHeight: '100vh', background: 'var(--bg)' }}>
@@ -1380,31 +1641,35 @@ export default function App() {
                 <div 
                   className={`sidebar-nav-item ${dashActiveTab === 'overview' ? 'active' : ''}`}
                   onClick={() => setDashActiveTab('overview')}
+                  style={{ gap: '0', paddingLeft: '1.25rem' }}
                 >
-                  <span className="sidebar-icon">📊</span> Overview
+                  Overview
                 </div>
                 <div 
                   className={`sidebar-nav-item ${dashActiveTab === 'accounts' ? 'active' : ''}`}
                   onClick={() => setDashActiveTab('accounts')}
+                  style={{ gap: '0', paddingLeft: '1.25rem' }}
                 >
-                  <span className="sidebar-icon">💼</span> My Accounts
+                  My Accounts
                 </div>
                 <div 
                   className={`sidebar-nav-item ${dashActiveTab === 'orders' ? 'active' : ''}`}
                   onClick={() => setDashActiveTab('orders')}
+                  style={{ gap: '0', paddingLeft: '1.25rem' }}
                 >
-                  <span className="sidebar-icon">📋</span> Orders
+                  Orders
                 </div>
                 <div 
                   className={`sidebar-nav-item ${dashActiveTab === 'support' ? 'active' : ''}`}
                   onClick={() => setDashActiveTab('support')}
+                  style={{ gap: '0', paddingLeft: '1.25rem' }}
                 >
-                  <span className="sidebar-icon">💬</span> Support
+                  Support
                 </div>
 
                 <div style={{ marginTop: 'auto' }}>
-                  <div className="sidebar-nav-item" onClick={handleLogout}>
-                    <span className="sidebar-icon">🚪</span> Logout
+                  <div className="sidebar-nav-item" onClick={handleLogout} style={{ gap: '0', paddingLeft: '1.25rem' }}>
+                    Logout
                   </div>
                 </div>
               </aside>
@@ -1482,7 +1747,6 @@ export default function App() {
 
                         {dashboardOrders.length === 0 ? (
                           <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text3)' }}>
-                            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📋</div>
                             <div style={{ marginBottom: '1rem' }}>No accounts active yet.</div>
                             <button className="btn btn-gold btn-sm" onClick={() => setActivePage('home')}>
                               Get Your First Account →
@@ -1538,7 +1802,6 @@ export default function App() {
 
                       {dashboardOrders.length === 0 ? (
                         <div style={{ background: 'var(--bg3)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '3rem', textAlign: 'center', color: 'var(--text3)' }}>
-                          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>💼</div>
                           <div style={{ marginBottom: '1rem' }}>No funding accounts purchased yet</div>
                           <button className="btn btn-gold btn-sm" onClick={() => setActivePage('home')}>
                             Acquire Funded Account →
@@ -1959,11 +2222,12 @@ export default function App() {
       <footer id="footer">
         <img className="footer-logo" src="https://i.ibb.co/VcyBJsFK/Gemini-Generated-Image-v36xfhv36xfhv36x.png" alt="QXT Funded" />
         <ul className="footer-links">
-          <li><a href="#" onClick={() => setActivePage('home')}>Home</a></li>
-          <li><a href="#accounts" onClick={() => setActivePage('home')}>Accounts</a></li>
-          <li><a href="#brokers" onClick={() => setActivePage('home')}>Brokers</a></li>
-          <li><a href="#" onClick={() => setActivePage('home')}>Terms & Agreement</a></li>
-          <li><a href="#" onClick={() => setActivePage('home')}>Privacy Agreement</a></li>
+          <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px' }} onClick={() => { setActivePage('home'); window.scrollTo({ top: 0 }); }}>Home</span></li>
+          <li><a href="#accounts" onClick={() => { setActivePage('home'); }} style={{ margin: '0 8px' }}>Accounts</a></li>
+          <li><a href="#brokers" onClick={() => { setActivePage('home'); }} style={{ margin: '0 8px' }}>Brokers</a></li>
+          <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px' }} onClick={() => { setActivePage('terms'); window.scrollTo({ top: 0 }); }}>Terms & Agreement</span></li>
+          <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px' }} onClick={() => { setActivePage('privacy'); window.scrollTo({ top: 0 }); }}>Privacy Agreement</span></li>
+          <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px' }} onClick={() => { setActivePage('faq'); window.scrollTo({ top: 0 }); }}>FAQ</span></li>
         </ul>
         <div className="footer-copy">© 2025 QXT Funded. All protocols secured.</div>
         <div className="footer-disclaimer">

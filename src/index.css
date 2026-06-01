@@ -1344,3 +1344,31 @@ footer {
     overflow-x: auto;
   }
 }
+
+/* ==========================================================================
+   LIVECHAT WIDGET CUSTOM OVERRIDES & LAYOUT RESPONSIVENESS
+   ========================================================================== */
+#chat-widget-container,
+#chat-widget-container iframe,
+iframe[src*="livechatinc.com"],
+iframe.maximixt-widget,
+.livechat-widget-parent {
+  transform: scale(0.85) !important;
+  transform-origin: bottom right !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 2147483647 !important;
+  max-width: 90vw !important;
+  transition: transform 0.25s ease, bottom 0.2s ease, right 0.2s ease !important;
+}
+
+@media (max-width: 768px) {
+  #chat-widget-container,
+  #chat-widget-container iframe,
+  iframe[src*="livechatinc.com"],
+  iframe.maximixt-widget {
+    transform: scale(0.80) !important;
+    bottom: 12px !important;
+    right: 12px !important;
+  }
+}

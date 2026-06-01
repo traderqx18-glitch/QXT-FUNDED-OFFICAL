@@ -1353,8 +1353,6 @@ footer {
 iframe[src*="livechatinc.com"],
 iframe.maximixt-widget,
 .livechat-widget-parent {
-  transform: scale(0.85) !important;
-  transform-origin: bottom right !important;
   bottom: 24px !important;
   right: 24px !important;
   z-index: 2147483647 !important;
@@ -1367,7 +1365,6 @@ iframe.maximixt-widget,
   #chat-widget-container iframe,
   iframe[src*="livechatinc.com"],
   iframe.maximixt-widget {
-    transform: scale(0.80) !important;
     bottom: 12px !important;
     right: 12px !important;
   }

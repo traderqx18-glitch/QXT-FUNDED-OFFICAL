@@ -84,11 +84,11 @@ const BROKER_LINKS: Record<string, string> = {
 };
 
 const PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: '💎', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: '🔷', wallet: 'TYMR9veu9r1ULfDSppe1dS2LApkUnwA8iA', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: '🟡', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'btc', label: 'Bitcoin', icon: '₿', wallet: 'bc1qsndm2wcg20c22qvhjwgt5jq2pwunjhqjjq0js7', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'Ξ', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TYMR9veu9r1ULfDSppe1dS2LApkUnwA8iA', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qsndm2wcg20c22qvhjwgt5jq2pwunjhqjjq0js7', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
 ];
 
 export default function App() {
@@ -631,19 +631,11 @@ export default function App() {
           <li><a href="#accounts" onClick={() => setActivePage('home')}>Accounts</a></li>
           <li><a href="#brokers" onClick={() => setActivePage('home')}>Brokers</a></li>
           <li><a href="#how-it-works" onClick={() => setActivePage('home')}>How It Works</a></li>
-          <li><span className="cursor-pointer" onClick={() => setActivePage('payment')}>Quick Pay</span></li>
           <li><span className="cursor-pointer" onClick={() => { setActivePage('faq'); window.scrollTo({ top: 0 }); }}>FAQ</span></li>
           <li><a href="#reviews" onClick={() => setActivePage('home')}>Reviews</a></li>
         </ul>
 
         <div className="nav-actions">
-          <button 
-            className={`btn btn-sm ${activePage === 'payment' ? 'btn-gold' : 'btn-outline'}`}
-            onClick={() => { setActivePage('payment'); }}
-            style={{ marginRight: '8px' }}
-          >
-            Quick Pay
-          </button>
           {currentUser ? (
             <>
               {/* Admin Panel button removed from the top bar per instructions */}
@@ -726,12 +718,6 @@ export default function App() {
           style={{ color: 'var(--text2)', fontSize: '1rem', cursor: 'pointer', padding: '0.75rem 0', borderBottom: '1px solid var(--border2)' }}
         >
           FAQ
-        </span>
-        <span 
-          onClick={() => { setMobileNavOpen(false); setActivePage('payment'); }} 
-          style={{ color: 'var(--gold)', fontSize: '1rem', cursor: 'pointer', padding: '0.75rem 0', borderBottom: '1px solid var(--border2)', fontWeight: 'bold' }}
-        >
-          ⚡ Direct Quick Pay
         </span>
         
         <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.50rem' }}>
@@ -837,26 +823,22 @@ export default function App() {
                 <div className="steps-grid">
                   <div className="step-card">
                     <div className="step-num">01</div>
-                    <div className="step-icon">👤</div>
-                    <h3 className="step-title">Create Account</h3>
+                    <h3 className="step-title" style={{ marginTop: '1rem' }}>Create Account</h3>
                     <p className="step-desc">Sign up with your email, verify your identity and join the QXT Funded community.</p>
                   </div>
                   <div className="step-card">
                     <div className="step-num">02</div>
-                    <div className="step-icon">📊</div>
-                    <h3 className="step-title">Choose Plan</h3>
+                    <h3 className="step-title" style={{ marginTop: '1rem' }}>Choose Plan</h3>
                     <p className="step-desc">Select Instant Funding for immediate access or Challenge Account to prove your skills.</p>
                   </div>
                   <div className="step-card">
                     <div className="step-num">03</div>
-                    <div className="step-icon">💳</div>
-                    <h3 className="step-title">Pay & Activate</h3>
+                    <h3 className="step-title" style={{ marginTop: '1rem' }}>Pay & Activate</h3>
                     <p className="step-desc">Pay via crypto — USDT, BTC, ETH. Instant confirmation and account activation.</p>
                   </div>
                   <div className="step-card">
                     <div className="step-num">04</div>
-                    <div className="step-icon">💰</div>
-                    <h3 className="step-title">Trade & Withdraw</h3>
+                    <h3 className="step-title" style={{ marginTop: '1rem' }}>Trade & Withdraw</h3>
                     <p className="step-desc">Start trading on your funded account. Request withdrawals anytime, keep up to 92%.</p>
                   </div>
                 </div>
@@ -1329,7 +1311,11 @@ export default function App() {
               {/* STEP 3 CONTENT: FINAL CONFIRMATION */}
               {purchaseState.step === 3 && (
                 <div style={{ maxWidth: '540px', margin: '0 auto', textAlign: 'center' }}>
-                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📊</div>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(212, 175, 55, 0.1)', border: '2px solid var(--gold)', margin: '0 auto 1.5rem', color: 'var(--gold)' }}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
                   <h3 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
                     Payment Submitted
                   </h3>

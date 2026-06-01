@@ -11,11 +11,11 @@ interface QuickPayViewProps {
 }
 
 const CONST_PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: '💎', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: '🔷', wallet: 'TYMR9veu9r1ULfDSppe1dS2LApkUnwA8iA', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: '🟡', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'btc', label: 'Bitcoin', icon: '₿', wallet: 'bc1qsndm2wcg20c22qvhjwgt5jq2pwunjhqjjq0js7', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'Ξ', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TYMR9veu9r1ULfDSppe1dS2LApkUnwA8iA', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qsndm2wcg20c22qvhjwgt5jq2pwunjhqjjq0js7', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
 ];
 
 const PRESET_ACCOUNTS = [

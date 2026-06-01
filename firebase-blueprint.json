@@ -1,0 +1,103 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account registration details and broker preference",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth User ID" },
+        "name": { "type": "string", "description": "Full name of the trader" },
+        "email": { "type": "string", "description": "Email address of the trader" },
+        "country": { "type": "string", "description": "Country of residence" },
+        "broker": { "type": "string", "description": "Preferred default broker" },
+        "registrationDate": { "type": "string", "format": "date-time", "description": "Timestamp when the user registered" }
+      },
+      "required": ["uid", "name", "email", "registrationDate"]
+    },
+    "Order": {
+      "title": "Account Order",
+      "description": "Purchase logs for Instant or Challenge funded trading accounts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique order ID" },
+        "userID": { "type": "string", "description": "Reference code for the user" },
+        "accountType": { "type": "string", "enum": ["Instant", "Challenge"], "description": "The category of the bought account" },
+        "accountSize": { "type": "number", "description": "Funded value size, e.g., 3000, 50000" },
+        "price": { "type": "number", "description": "Price paid in USD" },
+        "paymentMethod": { "type": "string", "description": "The cryptocurrency choice, e.g., USDT ERC20" },
+        "paymentStatus": { "type": "string", "enum": ["Pending", "Completed"], "description": "Crypto verification status" },
+        "orderStatus": { "type": "string", "enum": ["Pending", "Approved", "Rejected"], "description": "Admin review state" },
+        "broker": { "type": "string", "description": "Target broker for the account" },
+        "purchaseDate": { "type": "string", "format": "date-time", "description": "Datetime of purchase request" },
+        "accountNumber": { "type": "string", "description": "Assigned evaluation MT4/MT5 trading account number" },
+        "balance": { "type": "number", "description": "Current balance" },
+        "dailyLoss": { "type": "number", "description": "Recorded loss on current day" },
+        "maxDrawdown": { "type": "number", "description": "Maximum drawdown limit reached" },
+        "profit": { "type": "number", "description": "Current accumulated net profit" }
+      },
+      "required": ["id", "userID", "accountType", "accountSize", "price", "paymentMethod", "paymentStatus", "orderStatus", "broker", "purchaseDate"]
+    },
+    "Payment": {
+      "title": "Crypto Payment Details",
+      "description": "Details regarding the blockchain transaction of order",
+      "type": "object",
+      "properties": {
+        "txId": { "type": "string", "description": "Blockchain transaction hash ID" },
+        "orderId": { "type": "string", "description": "Associated order identifier" },
+        "walletAddress": { "type": "string", "description": "Receiver crypto address" },
+        "paymentMethod": { "type": "string", "description": "The crypto chain used" },
+        "amountCrypto": { "type": "string", "description": "Precise token value calculated" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Time payment declared paid" }
+      },
+      "required": ["txId", "orderId", "walletAddress", "paymentMethod"]
+    },
+    "SupportTicket": {
+      "title": "User Support Ticket",
+      "description": "Technical support message from user and administration reply history",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique support request code" },
+        "userID": { "type": "string", "description": "Sender user ID reference" },
+        "userName": { "type": "string", "description": "Display name of the user" },
+        "messageText": { "type": "string", "description": "Body message sent by user" },
+        "adminReply": { "type": "string", "description": "Administration reply text" },
+        "status": { "type": "string", "enum": ["On Queue", "Replied"], "description": "Status state tracker of reply" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Datetime when ticket created" }
+      },
+      "required": ["id", "userID", "userName", "messageText", "status", "timestamp"]
+    },
+    "SettingsConfig": {
+      "title": "Platform Settings",
+      "description": "Dynamic configuration parameters for QXT Funded website",
+      "type": "object",
+      "properties": {
+        "trustpilotScore": { "type": "number", "description": "Score to show from Trustpilot, eg 4.9" },
+        "globalPromoText": { "type": "string", "description": "Banner promotion marketing text" },
+        "maintenanceMode": { "type": "boolean", "description": "Disable purchases for scheduled platform upgrades" }
+      },
+      "required": ["trustpilotScore"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Documents tracking individual trader preferences and history"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Purchased accounts, containing their credentials, status, and live balances"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Crypto blockchain payment logs matching corresponding account orders"
+    },
+    "/support/{supportId}": {
+      "schema": "SupportTicket",
+      "description": "Q&A technical and financial query tickets generated by active users"
+    },
+    "/settings/{settingsId}": {
+      "schema": "SettingsConfig",
+      "description": "General system setup rules and UI configurations for the platform landing page"
+    }
+  }
+}

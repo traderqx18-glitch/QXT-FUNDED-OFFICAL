@@ -1,0 +1,175 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Catch-All Deny Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Structural & Primitive Helpers
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Check if the user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Role-based helper checking for the bootstrapped admin email
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'qxtfunded0@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Ownership check helper
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // 3. User Entity Validation Rules
+    function isValidUser(data) {
+      return data.uid is string && data.uid.size() <= 128
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.email is string && data.email.size() > 0 && data.email.size() <= 120
+        && (data.get('country', '') is string && data.get('country', '').size() <= 100)
+        && (data.get('broker', '') is string && data.get('broker', '').size() <= 100);
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      
+      // Creating a user profile is only allowed if they set their own uid
+      allow create: if isOwner(userId) && isValidUser(incoming()) && incoming().uid == userId;
+      
+      // Updates are restricted to owners modifying non-immutable properties or admins
+      allow update: if (isOwner(userId) && isValidUser(incoming()) && incoming().uid == userId && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['name', 'country', 'broker', 'purchasedAccounts'])
+      )) || isAdmin();
+      
+      allow delete: if isAdmin();
+    }
+
+    // 4. Order Entity Validation Rules
+    function isValidOrder(data) {
+      return data.id is string && data.id.size() <= 128
+        && data.userID is string && data.userID.size() <= 128
+        && data.accountType in ['Instant', 'Challenge']
+        && data.accountSize is number && data.accountSize > 0
+        && data.price is number && data.price >= 0
+        && data.paymentMethod is string && data.paymentMethod.size() <= 100
+        && data.paymentStatus in ['Pending', 'Completed']
+        && data.orderStatus in ['Pending', 'Approved', 'Rejected']
+        && (data.get('broker', '') is string && data.get('broker', '').size() <= 100);
+    }
+
+    match /orders/{orderId} {
+      // Secure list query: Enforce that non-admins can only query their own orders
+      allow get: if isOwner(existing().userID) || isAdmin();
+      allow list: if (isSignedIn() && resource.data.userID == request.auth.uid) || isAdmin();
+
+      // Only owner can create, starting with Pending state
+      allow create: if isSignedIn() 
+        && isValidId(orderId) 
+        && isValidOrder(incoming()) 
+        && isOwner(incoming().userID)
+        && incoming().orderStatus == 'Pending'
+        && incoming().paymentStatus == 'Pending';
+      
+      // Standard users can only update to signal they've initiated payment or update minimal details
+      allow update: if (
+        isSignedIn()
+        && isValidOrder(incoming())
+        && isOwner(existing().userID)
+        && incoming().userID == existing().userID
+        // Protect terminal status locking
+        && existing().orderStatus == 'Pending'
+        && (
+          // Action: Mark as paid / transition info
+          incoming().diff(existing()).affectedKeys().hasOnly(['paymentStatus', 'paymentMethod'])
+        )
+      ) || isAdmin();
+
+      allow delete: if isAdmin();
+    }
+
+    // 5. Payment Entity Validation Rules
+    function isValidPayment(data) {
+      return data.txId is string && data.txId.size() <= 200
+        && data.orderId is string && data.orderId.size() <= 128
+        && data.walletAddress is string && data.walletAddress.size() <= 128
+        && data.paymentMethod is string && data.paymentMethod.size() <= 100;
+    }
+
+    match /payments/{paymentId} {
+      allow get: if isSignedIn() && (isAdmin() || exists(/databases/$(database)/documents/orders/$(existing().orderId)) && get(/databases/$(database)/documents/orders/$(existing().orderId)).data.userID == request.auth.uid);
+      allow list: if isAdmin();
+
+      // Create payment log, must link to an order belonging to user
+      allow create: if isSignedIn()
+        && isValidId(paymentId)
+        && isValidPayment(incoming())
+        && exists(/databases/$(database)/documents/orders/$(incoming().orderId))
+        && get(/databases/$(database)/documents/orders/$(incoming().orderId)).data.userID == request.auth.uid;
+
+      allow update, delete: if isAdmin();
+    }
+
+    // 6. Support Ticket Validation Rules
+    function isValidSupportTicket(data) {
+      return data.id is string && data.id.size() <= 128
+        && data.userID is string && data.userID.size() <= 128
+        && data.userName is string && data.userName.size() <= 100
+        && data.messageText is string && data.messageText.size() <= 2000
+        && data.status in ['On Queue', 'Replied'];
+    }
+
+    match /support/{supportId} {
+      allow get: if isOwner(existing().userID) || isAdmin();
+      allow list: if (isSignedIn() && resource.data.userID == request.auth.uid) || isAdmin();
+
+      // Users can post support tickets, initial status must be 'On Queue'
+      allow create: if isSignedIn()
+        && isValidId(supportId)
+        && isValidSupportTicket(incoming())
+        && isOwner(incoming().userID)
+        && incoming().status == 'On Queue'
+        && (!incoming().keys().contains('adminReply') || incoming().adminReply == '');
+
+      // Users can update their ticket message, admins can reply
+      allow update: if (
+        isSignedIn()
+        && isValidSupportTicket(incoming())
+        && isOwner(existing().userID)
+        && incoming().userID == existing().userID
+        && incoming().diff(existing()).affectedKeys().hasOnly(['messageText'])
+      ) || isAdmin();
+
+      allow delete: if isAdmin();
+    }
+
+    // 7. General Settings
+    match /settings/{settingsId} {
+      allow read: if true; // Public configuration variables are readable by any viewer
+      allow write: if isAdmin(); // Only admins can modify homepage content, Trustpilot scores, etc.
+    }
+    
+    // Admin reference documents mapping
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if false; // Provisioned securely server-side or pre-defined
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "QXT Funded",
+  "description": "Premium prop-firm trading platform offering instant direct funding or challenge evaluation accounts with multiple crypto checkout methods and a live trader dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

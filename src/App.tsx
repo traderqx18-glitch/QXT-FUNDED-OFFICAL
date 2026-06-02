@@ -84,12 +84,25 @@ const BROKER_LINKS: Record<string, string> = {
 };
 
 const PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TYMR9veu9r1ULfDSppe1dS2LApkUnwA8iA', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qsndm2wcg20c22qvhjwgt5jq2pwunjhqjjq0js7', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x43C2449910f3c952251499a4e864c6beE419678f', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TTLoXoNhErdaYdSPikF4tEJVygJMmfpYsb', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x43C2449910f3c952251499a4e864c6beE419678f', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qrrwm7ctg6sv78fqxkcfrdurafhs7qkwcnx7mst', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x43C2449910f3c952251499a4e864c6beE419678f', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
 ];
+
+const adjustOrderStatus = (order: DbOrder): DbOrder => {
+  if (order.orderStatus === 'Pending') {
+    const elapsedMs = Date.now() - new Date(order.purchaseDate).getTime();
+    if (elapsedMs > 1 * 60 * 60 * 1000) { // 1 hour
+      return {
+        ...order,
+        orderStatus: 'Rejected' as const
+      };
+    }
+  }
+  return order;
+};
 
 export default function App() {
   // Navigation & User session states
@@ -418,7 +431,7 @@ export default function App() {
         // Fallback sync initially
         const locOrders = fallbackDb.getOrders(currentUser.uid);
         locOrders.sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
-        setDashboardOrders(locOrders);
+        setDashboardOrders(locOrders.map(adjustOrderStatus));
 
         const locTickets = fallbackDb.getSupportTickets(currentUser.uid);
         locTickets.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
@@ -434,7 +447,7 @@ export default function App() {
           });
           if (ordersList.length > 0) {
             ordersList.sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
-            setDashboardOrders(ordersList);
+            setDashboardOrders(ordersList.map(adjustOrderStatus));
           }
 
           const qSupport = query(collection(db, 'support'), where('userID', '==', currentUser.uid));

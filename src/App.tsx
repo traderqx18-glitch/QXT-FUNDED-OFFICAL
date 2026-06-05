@@ -85,10 +85,10 @@ const BROKER_LINKS: Record<string, string> = {
 
 const PAYMENT_METHODS = [
   { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x43C2449910f3c952251499a4e864c6beE419678f', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TTLoXoNhErdaYdSPikF4tEJVygJMmfpYsb', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x43C2449910f3c952251499a4e864c6beE419678f', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TWRory5CZRmc9283B8NLiqNLmppq9UJTec', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x271BABd6d6388ef9A8679B8cC97315ac82378f07', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
   { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qrrwm7ctg6sv78fqxkcfrdurafhs7qkwcnx7mst', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x43C2449910f3c952251499a4e864c6beE419678f', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x271BABd6d6388ef9A8679B8cC97315ac82378f07', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
 ];
 
 const adjustOrderStatus = (order: DbOrder): DbOrder => {

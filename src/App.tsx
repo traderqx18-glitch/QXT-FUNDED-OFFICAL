@@ -138,6 +138,12 @@ export default function App() {
   const [redirectedInvoice, setRedirectedInvoice] = useState<DbOrder | null>(null);
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
 
+  // Promo Code States
+  const [promoCode, setPromoCode] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
+  const [showPromoInput, setShowPromoInput] = useState(false);
+  const [promoError, setPromoError] = useState<string | null>(null);
+
   // Dashboard Sub-navigation Tab
   const [dashActiveTab, setDashActiveTab] = useState<'overview' | 'accounts' | 'orders' | 'support'>('overview');
   const [dashboardOrders, setDashboardOrders] = useState<DbOrder[]>([]);
@@ -336,8 +342,21 @@ export default function App() {
     }
   };
 
+  const getAccountPrice = (account: any, type: string) => {
+    if (type === 'instant' && appliedPromo === 'QXT30') {
+      return Math.round(account.price * 0.7); // 30% off
+    }
+    return account.price;
+  };
+
   // Choose Account to proceed to purchase
   const handleSelectAccount = (idx: number, type: 'instant' | 'challenge') => {
+    // Reset Promo States on selection
+    setPromoCode('');
+    setAppliedPromo(null);
+    setShowPromoInput(false);
+    setPromoError(null);
+
     const account = type === 'instant' ? INSTANT_ACCOUNTS[idx] : CHALLENGE_ACCOUNTS[idx];
     const initialPurchase = {
       step: 1,
@@ -373,7 +392,7 @@ export default function App() {
     const orderPayload = {
       accountType: type === 'instant' ? 'Instant' as const : 'Challenge' as const,
       accountSize: account.size,
-      price: account.price,
+      price: getAccountPrice(account, type),
       broker: broker || 'Quotex',
       paymentMethod: finalPayment,
       userID: currentUser.uid,
@@ -1093,7 +1112,7 @@ export default function App() {
                         {fmtMoney(purchaseState.account.size)} {purchaseState.type === 'instant' ? 'Instant' : 'Challenge'} Account
                       </strong>
                     </span>
-                    <strong style={{ color: 'var(--gold)', fontSize: '1.1rem' }}>{fmtMoney(purchaseState.account.price)}</strong>
+                    <strong style={{ color: 'var(--gold)', fontSize: '1.1rem' }}>{fmtMoney(getAccountPrice(purchaseState.account, purchaseState.type))}</strong>
                   </div>
 
                   <h3 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>
@@ -1162,9 +1181,122 @@ export default function App() {
               {/* STEP 2 CONTENT: SELECT PAYMENT METHOD */}
               {purchaseState.step === 2 && (
                 <div>
+                  <div className="selected-account-bar" style={{ marginBottom: '1.5rem' }}>
+                    <span>
+                      Selected: <strong style={{ color: 'var(--gold)' }}>
+                        {fmtMoney(purchaseState.account.size)} {purchaseState.type === 'instant' ? 'Instant' : 'Challenge'} Account
+                      </strong>
+                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      {appliedPromo && purchaseState.type === 'instant' && (
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text3)', textDecoration: 'line-through' }}>
+                          {fmtMoney(purchaseState.account.price)}
+                        </span>
+                      )}
+                      <strong style={{ color: 'var(--gold)', fontSize: '1.1rem' }}>
+                        {fmtMoney(getAccountPrice(purchaseState.account, purchaseState.type))}
+                      </strong>
+                    </div>
+                  </div>
+
                   <h3 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>
                     Select Payment Method (Crypto)
                   </h3>
+
+                  {/* Promo Code interactive section */}
+                  <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'var(--bg3)', borderRadius: '12px', border: '1px solid var(--border2)' }}>
+                    {!showPromoInput && !appliedPromo && (
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          setShowPromoInput(true);
+                          setPromoError(null);
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--gold)',
+                          fontSize: '0.875rem',
+                          fontWeight: '500',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          textDecoration: 'underline'
+                        }}
+                      >
+                        I have a promo code
+                      </button>
+                    )}
+
+                    {showPromoInput && !appliedPromo && (
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text2)', marginBottom: '0.5rem', fontWeight: 600 }}>ENTER PROMO CODE</label>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                          <input 
+                            type="text" 
+                            className="input-field" 
+                            placeholder="" 
+                            value={promoCode}
+                            onChange={(e) => setPromoCode(e.target.value)}
+                            style={{ flex: 1, textTransform: 'uppercase' }}
+                          />
+                          <button 
+                            type="button"
+                            className="btn btn-gold btn-sm"
+                            onClick={() => {
+                              if (purchaseState.type !== 'instant') {
+                                setPromoError('This promo code is only valid for Instant Accounts.');
+                                return;
+                              }
+                              if (promoCode.trim().toUpperCase() === 'QXT30') {
+                                setAppliedPromo('QXT30');
+                                setPromoError(null);
+                                triggerToast('Promo code QXT30 applied! 30% discount matches.', 'success');
+                              } else {
+                                setPromoError('Invalid promo code. Please try again.');
+                              }
+                            }}
+                            style={{ padding: '0.5rem 1rem' }}
+                          >
+                            Apply
+                          </button>
+                        </div>
+                        {promoError && (
+                          <div style={{ color: 'var(--red)', fontSize: '0.8rem', marginTop: '0.5rem', fontWeight: '500' }}>
+                            {promoError}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {appliedPromo && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span className="badge badge-success" style={{ background: 'var(--green)', color: '#000', fontWeight: 'bold', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem' }}>QXT30 APPLIED</span>
+                          <span style={{ fontSize: '0.85rem', color: 'var(--text2)' }}>30% off Instant Account discount applied</span>
+                        </div>
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            setAppliedPromo(null);
+                            setPromoCode('');
+                            triggerToast('Promo code removed', 'info');
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--red)',
+                            fontSize: '0.8rem',
+                            cursor: 'pointer',
+                            textDecoration: 'underline'
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+                  </div>
 
                   <div className="payment-method-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', margin: '1.5rem 0' }}>
                     {PAYMENT_METHODS.map((p) => (
@@ -1223,7 +1355,7 @@ export default function App() {
                     <div style={{ marginTop: '1rem' }}>
                       <div className="payment-box">
                         <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--gold)', fontFamily: 'Syne, sans-serif', marginBottom: '0.25rem' }}>
-                          Send {fmtMoney(purchaseState.account.price)}
+                          Send {fmtMoney(getAccountPrice(purchaseState.account, purchaseState.type))}
                         </div>
                         <div style={{ fontSize: '0.85rem', color: 'var(--text2)', marginBottom: '1rem' }}>
                           in {PAYMENT_METHODS.find(p => p.id === purchaseState.payment)?.label} equivalent
@@ -1343,7 +1475,7 @@ export default function App() {
                       <div style={{ color: 'var(--text3)' }}>Account Size</div>
                       <div style={{ fontWeight: 600, color: 'var(--gold)' }}>{fmtMoney(purchaseState.account.size)}</div>
                       <div style={{ color: 'var(--text3)' }}>Price Paid</div>
-                      <div style={{ fontWeight: 600 }}>{fmtMoney(purchaseState.account.price)}</div>
+                      <div style={{ fontWeight: 600 }}>{fmtMoney(getAccountPrice(purchaseState.account, purchaseState.type))}</div>
                       <div style={{ color: 'var(--text3)' }}>Broker API</div>
                       <div style={{ fontWeight: 600 }}>{purchaseState.broker}</div>
                       <div style={{ color: 'var(--text3)' }}>USDT Address Channel</div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, CreditCard, CheckCircle, Copy, Clock, Coins, Wallet, ExternalLink, ShieldCheck, RefreshCw } from 'lucide-react';
+import { doc, setDoc } from 'firebase/firestore';
 import { fallbackDb, DbOrder, db } from '../lib/firebase';
 
 interface QuickPayViewProps {
@@ -11,11 +12,11 @@ interface QuickPayViewProps {
 }
 
 const CONST_PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x726a40D7201457bdA881EF1Fd2A56882287E318d', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'THtSjPtAdZme1gzH9jPUtURen6RdSEd3ZM', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x726a40D7201457bdA881EF1Fd2A56882287E318d', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TJifFFsKRS3McB5eLhNDjpjzZFHbgqk3Dz', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
   { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x726a40D7201457bdA881EF1Fd2A56882287E318d', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
 ];
 
 const PRESET_ACCOUNTS = [
@@ -106,31 +107,43 @@ export default function QuickPayView({ onBackToHome, triggerToast, currentUser, 
     triggerToast('Payment address copied to clipboard ✓', 'success');
   };
 
-  const handleVerifyTransaction = () => {
+  const handleVerifyTransaction = async () => {
     if (!txDetails.trim()) {
       triggerToast('Please insert your TXID (Transaction Hash) or sender wallet address', 'error');
       return;
     }
 
     setIsVerifying(true);
-    setTimeout(() => {
-      const activeOrder = foundOrder || generatedOrder;
-      if (activeOrder) {
-        // Update the order status to Processing / Pending Approval in the database
-        const updatedOrder: DbOrder = {
-          ...activeOrder,
-          paymentStatus: 'Pending',
-          orderStatus: 'Pending'
-        };
-        fallbackDb.saveOrder(updatedOrder);
-        
-        // Update local reactive state so UI reflects instant processing validation
-        if (foundOrder) setFoundOrder(updatedOrder);
-        if (generatedOrder) setGeneratedOrder(updatedOrder);
+    const activeOrder = foundOrder || generatedOrder;
+    if (activeOrder) {
+      // Update the order status to Processing / Pending Approval in the database
+      const updatedOrder: DbOrder = {
+        ...activeOrder,
+        paymentStatus: 'Pending',
+        orderStatus: 'Pending'
+      };
+
+      try {
+        await setDoc(doc(db, 'orders', activeOrder.id), updatedOrder);
+      } catch (err) {
+        console.warn('Firestore write failure, using local caching');
       }
 
+      fallbackDb.saveOrder(updatedOrder);
+      
+      // Update local reactive state so UI reflects instant processing validation
+      if (foundOrder) setFoundOrder(updatedOrder);
+      if (generatedOrder) setGeneratedOrder(updatedOrder);
+    }
+
+    setTimeout(() => {
       setIsVerifying(false);
       triggerToast('Transaction details submitted. Approving on-chain soon!', 'success');
+      if (onPaymentSuccess) {
+        onPaymentSuccess();
+      } else {
+        onBackToHome();
+      }
     }, 1500);
   };
 
@@ -149,7 +162,6 @@ export default function QuickPayView({ onBackToHome, triggerToast, currentUser, 
       };
 
       try {
-        const { doc, setDoc } = await import('firebase/firestore');
         await setDoc(doc(db, 'orders', activeOrder.id), updatedOrder);
       } catch (err) {
         console.warn('Firestore write failure, using local caching');

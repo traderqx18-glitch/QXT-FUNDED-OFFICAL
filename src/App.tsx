@@ -343,8 +343,8 @@ export default function App() {
   };
 
   const getAccountPrice = (account: any, type: string) => {
-    if (appliedPromo === 'QXTFUNDED40') {
-      return Math.round(account.price * 0.6); // 40% off on every account
+    if (appliedPromo === 'QXTFUNDED18') {
+      return Math.round(account.price * 0.62); // 38% off on every account
     }
     return account.price;
   };
@@ -1188,7 +1188,7 @@ export default function App() {
                       </strong>
                     </span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {appliedPromo === 'QXTFUNDED40' && (
+                      {appliedPromo === 'QXTFUNDED18' && (
                         <span style={{ fontSize: '0.85rem', color: 'var(--text3)', textDecoration: 'line-through' }}>
                           {fmtMoney(purchaseState.account.price)}
                         </span>
@@ -1199,74 +1199,76 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Promo Code interactive section */}
-                  <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'var(--bg3)', borderRadius: '12px', border: '1px solid var(--border2)' }}>
-                    {!showPromoInput && !appliedPromo && (
-                      <button 
-                        type="button"
-                        onClick={() => {
-                          setShowPromoInput(true);
-                          setPromoError(null);
-                        }}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: 'var(--gold)',
-                          fontSize: '0.875rem',
-                          fontWeight: '500',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          textDecoration: 'underline'
-                        }}
-                      >
-                        I have a promo code
-                      </button>
-                    )}
-
-                    {showPromoInput && !appliedPromo && (
+                  {/* Promo Code interactive section - Toggleable and simple without revealing the code/discount percentage */}
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    {!appliedPromo ? (
                       <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text2)', marginBottom: '0.5rem', fontWeight: 600 }}>ENTER PROMO CODE</label>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                          <input 
-                            type="text" 
-                            className="input-field" 
-                            placeholder="" 
-                            value={promoCode}
-                            onChange={(e) => setPromoCode(e.target.value)}
-                            style={{ flex: 1, textTransform: 'uppercase' }}
-                          />
+                        {!showPromoInput ? (
                           <button 
                             type="button"
-                            className="btn btn-gold btn-sm"
                             onClick={() => {
-                              if (promoCode.trim().toUpperCase() === 'QXTFUNDED40') {
-                                setAppliedPromo('QXTFUNDED40');
-                                setPromoError(null);
-                                triggerToast('Promo code QXTFUNDED40 applied! 40% discount matches.', 'success');
-                              } else {
-                                setPromoError('Invalid promo code. Please try again.');
-                              }
+                              setShowPromoInput(true);
+                              setPromoError(null);
                             }}
-                            style={{ padding: '0.5rem 1rem' }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: 'var(--gold)',
+                              fontSize: '0.875rem',
+                              fontWeight: '500',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              textDecoration: 'underline'
+                            }}
                           >
-                            Apply
+                            I have a promo code
                           </button>
-                        </div>
-                        {promoError && (
-                          <div style={{ color: 'var(--red)', fontSize: '0.8rem', marginTop: '0.5rem', fontWeight: '500' }}>
-                            {promoError}
+                        ) : (
+                          <div style={{ padding: '1rem', background: 'var(--bg3)', borderRadius: '12px', border: '1px solid var(--border2)' }}>
+                            <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text2)', marginBottom: '0.5rem', fontWeight: 600 }}>ENTER PROMO CODE</label>
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                              <input 
+                                type="text" 
+                                className="input-field" 
+                                placeholder="Enter discount code" 
+                                value={promoCode}
+                                onChange={(e) => setPromoCode(e.target.value)}
+                                style={{ flex: 1, textTransform: 'uppercase' }}
+                              />
+                              <button 
+                                type="button"
+                                className="btn btn-gold btn-sm"
+                                onClick={() => {
+                                  if (promoCode.trim().toUpperCase() === 'QXTFUNDED18') {
+                                    setAppliedPromo('QXTFUNDED18');
+                                    setPromoError(null);
+                                    triggerToast('Promo code applied successfully!', 'success');
+                                  } else {
+                                    setPromoError('Invalid promo code. Please try again.');
+                                  }
+                                }}
+                                style={{ padding: '0.5rem 1rem' }}
+                              >
+                                Apply
+                              </button>
+                            </div>
+                            {promoError && (
+                              <div style={{ color: 'var(--red)', fontSize: '0.8rem', marginTop: '0.5rem', fontWeight: '500' }}>
+                                {promoError}
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
-                    )}
-
-                    {appliedPromo && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    ) : (
+                      <div style={{ padding: '1rem', background: 'var(--bg3)', borderRadius: '12px', border: '1px solid var(--border2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span className="badge badge-success" style={{ background: 'var(--green)', color: '#000', fontWeight: 'bold', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem' }}>QXTFUNDED40 APPLIED</span>
-                          <span style={{ fontSize: '0.85rem', color: 'var(--text2)' }}>40% off account discount applied</span>
+                          <span className="badge badge-success" style={{ background: 'var(--gold)', color: '#000', fontWeight: 'bold', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem' }}>
+                            PROMO APPLIED
+                          </span>
+                          <span style={{ fontSize: '0.85rem', color: 'var(--text2)' }}>Discount applied to your order</span>
                         </div>
                         <button 
                           type="button"

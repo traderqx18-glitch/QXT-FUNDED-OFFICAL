@@ -12,11 +12,11 @@ interface QuickPayViewProps {
 }
 
 const CONST_PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TJifFFsKRS3McB5eLhNDjpjzZFHbgqk3Dz', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TJifFFsKRS3McB5eLhNDjpjzZFHbgqk3Dz', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
+  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6', logo: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png' },
 ];
 
 const PRESET_ACCOUNTS = [
@@ -400,11 +400,14 @@ export default function QuickPayView({ onBackToHome, triggerToast, currentUser, 
                   style={{ height: '32px', width: '32px', objectFit: 'contain' }}
                   onError={(e) => {
                     const fallbackUrls: Record<string, string> = {
-                      'bitcoin-btc-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
-                      'ethereum-eth-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
-                      'tether-usdt-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                      'btc': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
+                      'eth': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
+                      'tether': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                      'usdt': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                      'bitcoin': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
+                      'ethereum': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
                     };
-                    const srcStr = e.currentTarget.src || '';
+                    const srcStr = (e.currentTarget.src || '').toLowerCase();
                     let matched = false;
                     for (const [key, val] of Object.entries(fallbackUrls)) {
                       if (srcStr.includes(key)) {
@@ -414,10 +417,7 @@ export default function QuickPayView({ onBackToHome, triggerToast, currentUser, 
                       }
                     }
                     if (!matched) {
-                      e.currentTarget.style.display = 'none';
-                      const parent = e.currentTarget.parentElement;
-                      const fallbackEl = parent?.querySelector('.coin-fallback');
-                      if (fallbackEl) (fallbackEl as HTMLElement).style.display = 'flex';
+                      e.currentTarget.src = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png';
                     }
                   }}
                   referrerPolicy="no-referrer"

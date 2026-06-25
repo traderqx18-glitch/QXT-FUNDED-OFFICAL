@@ -84,11 +84,11 @@ const BROKER_LINKS: Record<string, string> = {
 };
 
 const PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TJifFFsKRS3McB5eLhNDjpjzZFHbgqk3Dz', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png' },
-  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TJifFFsKRS3McB5eLhNDjpjzZFHbgqk3Dz', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
+  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6', logo: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png' },
 ];
 
 const adjustOrderStatus = (order: DbOrder): DbOrder => {
@@ -343,8 +343,8 @@ export default function App() {
   };
 
   const getAccountPrice = (account: any, type: string) => {
-    if (appliedPromo === 'QXTFUNDED18') {
-      return Math.round(account.price * 0.62); // 38% off on every account
+    if (appliedPromo === 'QXTFUNDED56') {
+      return Math.round(account.price * 0.75); // 25% off on every account
     }
     return account.price;
   };
@@ -1188,7 +1188,7 @@ export default function App() {
                       </strong>
                     </span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {appliedPromo === 'QXTFUNDED18' && (
+                      {appliedPromo === 'QXTFUNDED56' && (
                         <span style={{ fontSize: '0.85rem', color: 'var(--text3)', textDecoration: 'line-through' }}>
                           {fmtMoney(purchaseState.account.price)}
                         </span>
@@ -1241,8 +1241,8 @@ export default function App() {
                                 type="button"
                                 className="btn btn-gold btn-sm"
                                 onClick={() => {
-                                  if (promoCode.trim().toUpperCase() === 'QXTFUNDED18') {
-                                    setAppliedPromo('QXTFUNDED18');
+                                  if (promoCode.trim().toUpperCase() === 'QXTFUNDED56') {
+                                    setAppliedPromo('QXTFUNDED56');
                                     setPromoError(null);
                                     triggerToast('Promo code applied successfully!', 'success');
                                   } else {
@@ -1326,11 +1326,14 @@ export default function App() {
                           referrerPolicy="no-referrer"
                           onError={(e) => {
                             const fallbackUrls: Record<string, string> = {
-                              'bitcoin-btc-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
-                              'ethereum-eth-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
-                              'tether-usdt-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                              'btc': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
+                              'eth': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
+                              'tether': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                              'usdt': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                              'bitcoin': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
+                              'ethereum': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
                             };
-                            const srcStr = e.currentTarget.src || '';
+                            const srcStr = (e.currentTarget.src || '').toLowerCase();
                             let matched = false;
                             for (const [key, val] of Object.entries(fallbackUrls)) {
                               if (srcStr.includes(key)) {
@@ -1340,7 +1343,7 @@ export default function App() {
                               }
                             }
                             if (!matched) {
-                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.src = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png';
                             }
                           }}
                         />
@@ -1367,11 +1370,14 @@ export default function App() {
                             referrerPolicy="no-referrer"
                             onError={(e) => {
                               const fallbackUrls: Record<string, string> = {
-                                'bitcoin-btc-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
-                                'ethereum-eth-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
-                                'tether-usdt-logo.png': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                                'btc': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
+                                'eth': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
+                                'tether': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                                'usdt': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png',
+                                'bitcoin': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png',
+                                'ethereum': 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png',
                               };
-                              const srcStr = e.currentTarget.src || '';
+                              const srcStr = (e.currentTarget.src || '').toLowerCase();
                               let matched = false;
                               for (const [key, val] of Object.entries(fallbackUrls)) {
                                 if (srcStr.includes(key)) {
@@ -1381,7 +1387,7 @@ export default function App() {
                                 }
                               }
                               if (!matched) {
-                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.src = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png';
                               }
                             }}
                           />

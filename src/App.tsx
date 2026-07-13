@@ -84,11 +84,11 @@ const BROKER_LINKS: Record<string, string> = {
 };
 
 const PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TJifFFsKRS3McB5eLhNDjpjzZFHbgqk3Dz', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' },
-  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6', logo: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x8027139b154B2a8F308Bd9BB705A1D630E8c18af', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TWv5TxT1vyKzCpK1sENCiVSRPmaJ1qdCF8', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x8027139b154B2a8F308Bd9BB705A1D630E8c18af', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png' },
 ];
 
 const adjustOrderStatus = (order: DbOrder): DbOrder => {
@@ -1241,12 +1241,11 @@ export default function App() {
                                 type="button"
                                 className="btn btn-gold btn-sm"
                                 onClick={() => {
-                                  if (promoCode.trim().toUpperCase() === 'QXTFUNDED56') {
-                                    setAppliedPromo('QXTFUNDED56');
-                                    setPromoError(null);
-                                    triggerToast('Promo code applied successfully!', 'success');
+                                  const code = promoCode.trim().toUpperCase();
+                                  if (code) {
+                                    setPromoError('This promo code has expired.');
                                   } else {
-                                    setPromoError('Invalid promo code. Please try again.');
+                                    setPromoError('Please enter a promo code.');
                                   }
                                 }}
                                 style={{ padding: '0.5rem 1rem' }}

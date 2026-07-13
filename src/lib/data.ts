@@ -51,36 +51,36 @@ export const cryptoPaymentMethods: CryptoPaymentMethod[] = [
   {
     id: "usdtERC20",
     name: "USDT ERC20",
-    logo: "https://assets.coingecko.com/coins/images/325/large/Tether.png",
-    wallet: "0xABCDEF123456789",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0xABCDEF123456789&color=b5903b"
+    logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png",
+    wallet: "0x8027139b154B2a8F308Bd9BB705A1D630E8c18af",
+    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0x8027139b154B2a8F308Bd9BB705A1D630E8c18af&color=b5903b"
   },
   {
     id: "usdtTRC20",
     name: "USDT TRC20",
-    logo: "https://assets.coingecko.com/coins/images/325/large/Tether.png",
-    wallet: "TXYZ987654321",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=TXYZ987654321&color=0075ff"
+    logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png",
+    wallet: "TWv5TxT1vyKzCpK1sENCiVSRPmaJ1qdCF8",
+    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=TWv5TxT1vyKzCpK1sENCiVSRPmaJ1qdCF8&color=0075ff"
   },
   {
     id: "bep20",
     name: "BEP20 (USDT / BNB)",
-    logo: "https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png",
-    wallet: "0xBEP20EXAMPLE",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0xBEP20EXAMPLE&color=b5903b"
+    logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png",
+    wallet: "0x8027139b154B2a8F308Bd9BB705A1D630E8c18af",
+    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0x8027139b154B2a8F308Bd9BB705A1D630E8c18af&color=b5903b"
   },
   {
     id: "btc",
     name: "BTC (Bitcoin)",
-    logo: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
-    wallet: "1BitcoinWalletExample",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=1BitcoinWalletExample&color=b5903b"
+    logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png",
+    wallet: "bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6",
+    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6&color=b5903b"
   },
   {
     id: "eth",
     name: "ETH (Ethereum)",
-    logo: "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
-    wallet: "0xETHWalletExample",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0xETHWalletExample&color=0075ff"
+    logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png",
+    wallet: "0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562",
+    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562&color=0075ff"
   }
 ];

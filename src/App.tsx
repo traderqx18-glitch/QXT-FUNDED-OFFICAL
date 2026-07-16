@@ -343,8 +343,13 @@ export default function App() {
   };
 
   const getAccountPrice = (account: any, type: string) => {
-    if (appliedPromo === 'QXTFUNDED56') {
-      return Math.round(account.price * 0.75); // 25% off on every account
+    if (appliedPromo === 'QXTFUNDED45') {
+      const sizeNum = typeof account.size === 'string'
+        ? parseInt(account.size.replace(/[^0-9]/g, ''), 10)
+        : account.size;
+      if (sizeNum > 8000) {
+        return Math.round(account.price * (1 - 0.1162)); // 11.62% discount
+      }
     }
     return account.price;
   };
@@ -1188,7 +1193,7 @@ export default function App() {
                       </strong>
                     </span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {appliedPromo === 'QXTFUNDED56' && (
+                      {appliedPromo && getAccountPrice(purchaseState.account, purchaseState.type) !== purchaseState.account.price && (
                         <span style={{ fontSize: '0.85rem', color: 'var(--text3)', textDecoration: 'line-through' }}>
                           {fmtMoney(purchaseState.account.price)}
                         </span>
@@ -1242,10 +1247,34 @@ export default function App() {
                                 className="btn btn-gold btn-sm"
                                 onClick={() => {
                                   const code = promoCode.trim().toUpperCase();
-                                  if (code) {
+                                  if (!code) {
+                                    setPromoError('Please enter a promo code.');
+                                    return;
+                                  }
+
+                                  if (code === 'QXTFUNDED45') {
+                                    const expiryTime = new Date('2026-07-16T20:10:00-07:00').getTime();
+                                    if (Date.now() > expiryTime) {
+                                      setPromoError('This promo code has expired.');
+                                      return;
+                                    }
+
+                                    const sizeNum = typeof purchaseState?.account.size === 'string'
+                                      ? parseInt(purchaseState.account.size.replace(/[^0-9]/g, ''), 10)
+                                      : purchaseState?.account.size;
+
+                                    if (sizeNum <= 8000) {
+                                      setPromoError('This promo code is only valid for accounts above $8,000.');
+                                      return;
+                                    }
+
+                                    setAppliedPromo('QXTFUNDED45');
+                                    setPromoError(null);
+                                    triggerToast('Promo code applied successfully!', 'success');
+                                  } else if (code === 'QXTFUNDED56' || code === 'QXTFUNDED18') {
                                     setPromoError('This promo code has expired.');
                                   } else {
-                                    setPromoError('Please enter a promo code.');
+                                    setPromoError('Invalid promo code. Please try again.');
                                   }
                                 }}
                                 style={{ padding: '0.5rem 1rem' }}

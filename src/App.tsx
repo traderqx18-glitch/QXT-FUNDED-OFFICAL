@@ -84,11 +84,11 @@ const BROKER_LINKS: Record<string, string> = {
 };
 
 const PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0x8027139b154B2a8F308Bd9BB705A1D630E8c18af', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TWv5TxT1vyKzCpK1sENCiVSRPmaJ1qdCF8', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0x8027139b154B2a8F308Bd9BB705A1D630E8c18af', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
-  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qfckj3f02hmpawgck4x3w0dah4jl08q2mcrcra6', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0x1B4AA3ecfDDe71bfb92486aBA7DC66a5282Bb562', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TYMR9veu9r1ULfDSppe1dS2LApkUnwA8iA', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1q4vcj0c0ffe56spnj8chg2umgvcdn2q22w6q7ux', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0xddFe4cf18e35Baf826d85383530a07f41BE80773', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png' },
 ];
 
 const adjustOrderStatus = (order: DbOrder): DbOrder => {

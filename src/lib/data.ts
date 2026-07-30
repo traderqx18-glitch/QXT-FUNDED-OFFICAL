@@ -66,8 +66,8 @@ export const cryptoPaymentMethods: CryptoPaymentMethod[] = [
     id: "bep20",
     name: "BEP20 (USDT / BNB)",
     logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png",
-    wallet: "0x8027139b154B2a8F308Bd9BB705A1D630E8c18af",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0x8027139b154B2a8F308Bd9BB705A1D630E8c18af&color=b5903b"
+    wallet: "0xddFe4cf18e35Baf826d85383530a07f41BE80773",
+    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0xddFe4cf18e35Baf826d85383530a07f41BE80773&color=b5903b"
   },
   {
     id: "btc",

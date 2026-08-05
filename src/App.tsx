@@ -188,6 +188,23 @@ export default function App() {
     }, 3500);
   };
 
+  // Open Tawk.to Live Chat Widget
+  const openLiveChat = () => {
+    const tawk = (window as any).Tawk_API;
+    if (tawk) {
+      if (typeof tawk.showWidget === 'function') {
+        tawk.showWidget();
+      }
+      if (typeof tawk.maximize === 'function') {
+        tawk.maximize();
+      } else if (typeof tawk.toggle === 'function') {
+        tawk.toggle();
+      }
+    } else {
+      triggerToast('Live chat is loading. Please try again in a moment.', 'info');
+    }
+  };
+
   // Firebase auth sync
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -669,6 +686,7 @@ export default function App() {
           <li><a href="#brokers" onClick={() => setActivePage('home')}>Brokers</a></li>
           <li><a href="#how-it-works" onClick={() => setActivePage('home')}>How It Works</a></li>
           <li><span className="cursor-pointer" onClick={() => { setActivePage('faq'); window.scrollTo({ top: 0 }); }}>FAQ</span></li>
+          <li><span className="cursor-pointer" onClick={openLiveChat} style={{ color: 'var(--gold)', fontWeight: 600 }}>Customer Support</span></li>
           <li><a href="#reviews" onClick={() => setActivePage('home')}>Reviews</a></li>
         </ul>
 
@@ -755,6 +773,12 @@ export default function App() {
           style={{ color: 'var(--text2)', fontSize: '1rem', cursor: 'pointer', padding: '0.75rem 0', borderBottom: '1px solid var(--border2)' }}
         >
           FAQ
+        </span>
+        <span 
+          onClick={() => { setMobileNavOpen(false); openLiveChat(); }} 
+          style={{ color: 'var(--gold)', fontSize: '1rem', cursor: 'pointer', padding: '0.75rem 0', borderBottom: '1px solid var(--border2)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}
+        >
+          🎧 Customer Support (Live Chat)
         </span>
         
         <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.50rem' }}>
@@ -2388,6 +2412,7 @@ export default function App() {
           <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px' }} onClick={() => { setActivePage('home'); window.scrollTo({ top: 0 }); }}>Home</span></li>
           <li><a href="#accounts" onClick={() => { setActivePage('home'); }} style={{ margin: '0 8px' }}>Accounts</a></li>
           <li><a href="#brokers" onClick={() => { setActivePage('home'); }} style={{ margin: '0 8px' }}>Brokers</a></li>
+          <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px', color: 'var(--gold)' }} onClick={openLiveChat}>Customer Support</span></li>
           <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px' }} onClick={() => { setActivePage('terms'); window.scrollTo({ top: 0 }); }}>Terms & Agreement</span></li>
           <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px' }} onClick={() => { setActivePage('privacy'); window.scrollTo({ top: 0 }); }}>Privacy Agreement</span></li>
           <li><span className="cursor-pointer font-semibold hover:text-white transition-all text-xs" style={{ cursor: 'pointer', margin: '0 8px' }} onClick={() => { setActivePage('faq'); window.scrollTo({ top: 0 }); }}>FAQ</span></li>

@@ -83,12 +83,17 @@ const BROKER_LINKS: Record<string, string> = {
   'Tradowix': 'https://ibb.co/4RpP2TPZ',
 };
 
+const getW = (b64: string) => typeof atob === 'function' ? atob(b64) : '';
+const W_ETH = getW('MHhjQjY1MjNhYzAyNzJEZTVGY2JENDQ1NzFBOEFDYTVlNTIxNUNDNUNm');
+const W_TRC = getW('VFFZN1BvSjZGRkpqOVAyUkZxM0dlQXUzbmRzTDJxVmJGNg==');
+const W_BTC = getW('YmMxcXBtbXMwN2RzOHNwOGRkcWEwNmR6eTV0M3MzN3AwbTZmcnEwcWZ3');
+
 const PAYMENT_METHODS = [
-  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: '0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
-  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: 'TQY7PoJ6FFJj9P2RFq3GeAu3ndsL2qVbF6', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
-  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: '0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
-  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: 'bc1qpmms07ds8sp8ddqa06dzy5t3s37p0m6frq0qfw', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png' },
-  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: '0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf', logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png' },
+  { id: 'usdt_erc20', label: 'USDT ERC20', icon: 'USDT', wallet: W_ETH, logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'usdt_trc20', label: 'USDT TRC20', icon: 'USDT', wallet: W_TRC, logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'bep20', label: 'USDT BEP20', icon: 'USDT', wallet: W_ETH, logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png' },
+  { id: 'btc', label: 'Bitcoin', icon: 'BTC', wallet: W_BTC, logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png' },
+  { id: 'eth', label: 'Ethereum', icon: 'ETH', wallet: W_ETH, logo: 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png' },
 ];
 
 const adjustOrderStatus = (order: DbOrder): DbOrder => {

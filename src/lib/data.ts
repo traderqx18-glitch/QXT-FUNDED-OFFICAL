@@ -47,40 +47,45 @@ export const brokers: Broker[] = [
   { id: "olympTrade", name: "Olymp Trade", logo: "https://i.ibb.co/FqDRTqx1/toppng-com-olymp-trade-transparent-logo-png-5000x5113.png", desc: "Multi-market broker with deep indicators selection and lightning fast fills." }
 ];
 
+const getW = (b64: string) => typeof atob === 'function' ? atob(b64) : '';
+const W_ETH = getW('MHhjQjY1MjNhYzAyNzJEZTVGY2JENDQ1NzFBOEFDYTVlNTIxNUNDNUNm');
+const W_TRC = getW('VFFZN1BvSjZGRkpqOVAyUkZxM0dlQXUzbmRzTDJxVmJGNg==');
+const W_BTC = getW('YmMxcXBtbXMwN2RzOHNwOGRkcWEwNmR6eTV0M3MzN3AwbTZmcnEwcWZ3');
+
 export const cryptoPaymentMethods: CryptoPaymentMethod[] = [
   {
     id: "usdtERC20",
     name: "USDT ERC20",
     logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png",
-    wallet: "0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf&color=b5903b"
+    wallet: W_ETH,
+    qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${W_ETH}&color=b5903b`
   },
   {
     id: "usdtTRC20",
     name: "USDT TRC20",
     logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png",
-    wallet: "TQY7PoJ6FFJj9P2RFq3GeAu3ndsL2qVbF6",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=TQY7PoJ6FFJj9P2RFq3GeAu3ndsL2qVbF6&color=0075ff"
+    wallet: W_TRC,
+    qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${W_TRC}&color=0075ff`
   },
   {
     id: "bep20",
     name: "BEP20 (USDT / BNB)",
     logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png",
-    wallet: "0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf&color=b5903b"
+    wallet: W_ETH,
+    qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${W_ETH}&color=b5903b`
   },
   {
     id: "btc",
     name: "BTC (Bitcoin)",
     logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png",
-    wallet: "bc1qpmms07ds8sp8ddqa06dzy5t3s37p0m6frq0qfw",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=bc1qpmms07ds8sp8ddqa06dzy5t3s37p0m6frq0qfw&color=b5903b"
+    wallet: W_BTC,
+    qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${W_BTC}&color=b5903b`
   },
   {
     id: "eth",
     name: "ETH (Ethereum)",
     logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png",
-    wallet: "0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf",
-    qrCodeUrl: "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=0xcB6523ac0272De5FcbD44571A8ACa5e5215CC5Cf&color=0075ff"
+    wallet: W_ETH,
+    qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${W_ETH}&color=0075ff`
   }
 ];
